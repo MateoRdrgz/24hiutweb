@@ -46,18 +46,6 @@
                     console.error('Error loading the map data:', error);
                 });
         }
-
-        // Load the JSON map data
-        fetch('content.json') // Ensure this file is in the same directory as index.html
-            .then(response => response.json())
-            .then(data => {
-                tileset.onload = () => {
-                    drawMap(data);
-                };
-            })
-            .catch(error => {
-                console.error('Error loading the map data:', error);
-            });
     </script>
 </body>
 </html>
