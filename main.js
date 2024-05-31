@@ -27,15 +27,76 @@ function drawMap(mapData) {
 }
 
 tileset.onload = async () => {
-    await fetch('map-layers.json') // Ensure this file is in the same directory as index.html
-        .then(response => response.json())
-        .then(data => {
-            for (let obj of data) {
-                drawMap(obj.view);
-            }
-
-        })
-        .catch(error => {
-            console.error('Error loading the map data:', error);
-        });
+    draw(await getUpdates());
+    // Ensure this file is in the same directory as index.html
 }
+
+
+async function draw(json){
+    for (let obj of json.layers) {
+        drawMap(obj.view);
+    }
+}
+
+async function getUpdates(){
+    const res = await fetch("https://24hweb.iutv.univ-paris13.fr/server/get-update",{
+        method: 'GET',
+        headers:{
+            TeamPassword:"hN3iKNcI3",
+            TeamPlayerNb:1
+        }
+    })
+
+    if(res.ok){
+        return await res.json();
+    }
+    return null;
+}
+
+async function getUpdatesMove(position){
+    const res = await fetch("https://24hweb.iutv.univ-paris13.fr/server/move",{
+        method: 'POST',
+        headers:{
+            TeamPassword:"hN3iKNcI3",
+            TeamPlayerNb:1,
+            "Content-Type": "application/json",
+        },
+        body: {
+            direction :position
+        }
+    })
+
+    if(res.ok){
+        return await res.json();
+    }
+    return null;
+}
+
+
+document.onkeydown = checkKey;
+
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+async function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        draw( await getUpdatesMove("up"))
+
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+    }
+    else if (e.keyCode == '37') {
+        // left arrow
+    }
+    else if (e.keyCode == '39') {
+        // right arrow
+    }
+
+}
+console.log(await getUpdatesMove('up'))
