@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tileset Canvas</title>
+    <title>Tileset Map</title>
 </head>
 <body>
-    <canvas id="gameCanvas" width="256" height="256"></canvas>
+    <canvas id="gameCanvas" width="336" height="336"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const context = canvas.getContext('2d');
@@ -15,7 +15,7 @@
 
         // Load the tileset image
         const tileset = new Image();
-        tileset.src = '/mnt/data/tileset.png';
+        tileset.src = 'tileset.png'; // Ensure this file is in the same directory as index.html
 
         // Function to draw a tile based on its ID
         function drawTile(tileId, x, y) {
@@ -26,15 +26,27 @@
             context.drawImage(tileset, sourceX, sourceY, tileSize, tileSize, x, y, tileSize, tileSize);
         }
 
-        // When the image is loaded, draw the tile at position (16, 16) on the tileset
-        tileset.onload = () => {
-            // Draw a specific tile from the tileset, tileId for position (16, 16) is calculated as follows:
-            const tileX = 16;
-            const tileY = 16;
-            const tileId = (tileY / tileSize) * (tileset.width / tileSize) + (tileX / tileSize);
+        // Function to draw the entire map
+        function drawMap(mapData) {
+            for (let row = 0; row < mapData.length; row++) {
+                for (let col = 0; col < mapData[row].length; col++) {
+                    const tileId = mapData[row][col];
+                    drawTile(tileId, col * tileSize, row * tileSize);
+                }
+            }
+        }
 
-            drawTile(tileId, 0, 0);  // Draw at the top-left corner of the canvas
-        };
+        // Load the JSON map data
+        fetch('content.json') // Ensure this file is in the same directory as index.html
+            .then(response => response.json())
+            .then(data => {
+                tileset.onload = () => {
+                    drawMap(data);
+                };
+            })
+            .catch(error => {
+                console.error('Error loading the map data:', error);
+            });
     </script>
 </body>
 </html>
