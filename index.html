@@ -4,9 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tileset Map</title>
+    <style>
+        .chat{
+            overflow: scroll;
+        }
+
+        body{
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        span{
+            margin-right: 8px;
+        }
+
+
+
+
+    </style>
 </head>
+
+
 <body>
-    <canvas id="gameCanvas" width="336" height="336"></canvas>
+    <canvas tabindex="0" id="gameCanvas" width="336" height="336" style="border:solid black 1px"></canvas>
+    <section id="chat">
+
+
+        <div>
+            <label for="messageInput">Message :</label>
+            <input id="messageInput" type="text">
+            <button id="sendButton">Envoyer</button>
+        </div>
+
+        <div id="chatMessages" class="chat">
+
+        </div>
+    </section>
+
     <script src="main.js" type="module"></script>
 </body>
 </html>
